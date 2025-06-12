@@ -1,6 +1,21 @@
 @import "tailwindcss";
 
 :root {
+  /* Primary Colors */
+  --color-primary: #2563eb;
+  --color-primary-light: #3b82f6;
+  --color-primary-dark: #1d4ed8;
+
+  /* Secondary Colors */
+  --color-secondary: #64748b;
+  --color-secondary-light: #94a3b8;
+  --color-secondary-dark: #475569;
+
+  /* Accent Colors */
+  --color-accent: #f59e0b;
+  --color-accent-light: #fbbf24;
+  --color-accent-dark: #d97706;
+
   --background: #ffffff;
   --foreground: #171717;
 }
