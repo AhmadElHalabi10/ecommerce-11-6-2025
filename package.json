@@ -10,18 +10,22 @@
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.9.1",
+    "@hookform/resolvers": "^5.1.1",
     "@types/pg": "^8.15.4",
+    "bcryptjs": "^3.0.2",
     "drizzle-orm": "^0.44.2",
-    "next": "15.3.3",
+    "next": "^15.3.3",
     "next-auth": "^4.24.11",
     "pg": "^8.16.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react": "^19.1.0",
+    "react-dom": "^19.0.0",
+    "react-hook-form": "^7.57.0",
+    "zod": "^3.25.63"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
-    "@types/react": "^19",
+    "@types/react": "^19.1.8",
     "@types/react-dom": "^19",
     "tailwindcss": "^4",
     "typescript": "^5"

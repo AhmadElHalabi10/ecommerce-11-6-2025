@@ -1,0 +1,141 @@
+"use client";
+
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
+
+const schema = z.object({
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(1, "Password is required"),
+});
+
+type FormData = z.infer<typeof schema>;
+
+export default function LoginPage() {
+  const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({
+    resolver: zodResolver(schema),
+  });
+
+  const onSubmit = async (data: FormData) => {
+    setIsLoading(true);
+    setError("");
+
+    try {
+      const result = await signIn("credentials", {
+        email: data.email,
+        password: data.password,
+        redirect: false,
+      });
+
+      if (result?.error) {
+        setError("Invalid email or password");
+      } else {
+        router.push("/dashboard");
+      }
+    } catch {
+      setError("Something went wrong. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleGoogleSignIn = () => {
+    signIn("google", { callbackUrl: "/dashboard" });
+  };
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-[#faf5f5]">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="bg-white p-8 rounded-lg shadow-md w-full max-w-md"
+        autoComplete="off"
+      >
+        <h2 className="text-2xl font-bold mb-6 text-center text-black">
+          Login to your account
+        </h2>
+
+        <div className="mb-4">
+          <input
+            type="email"
+            placeholder="Email Id"
+            {...register("email")}
+            className="w-full p-3 border border-[#e5e7eb] rounded text-sm placeholder-gray-400 focus:outline-none focus:ring focus:ring-[#ff5c5c]/30"
+          />
+        </div>
+
+        <div className="mb-2 relative">
+          <input
+            type={showPassword ? "text" : "password"}
+            placeholder="Password"
+            {...register("password")}
+            className="w-full p-3 border border-[#e5e7eb] rounded text-sm placeholder-gray-400 focus:outline-none focus:ring focus:ring-[#ff5c5c]/30 pr-10"
+          />
+          <span
+            className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500"
+            onClick={() => setShowPassword((v) => !v)}
+            aria-label={showPassword ? "Hide password" : "Show password"}
+          >
+            {showPassword ? (
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3 3l18 18M9.88 9.88a3 3 0 104.24 4.24M21.06 12.01c-.28-.87-.68-1.69-1.17-2.45a10.51 10.51 0 00-15.78 0 10.57 10.57 0 00-1.17 2.45 10.52 10.52 0 0017.12 0z" />
+              </svg>
+            ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M2.46 12c1.27-4.06 5.06-7 9.54-7s8.27 2.94 9.54 7c-1.27 4.06-5.06 7-9.54 7s-8.27-2.94-9.54-7z" />
+              </svg>
+            )}
+          </span>
+        </div>
+
+        <div className="mb-4 text-right">
+          <a href="/forgot-password" className="text-sm text-gray-600 hover:underline">
+            Forgot Password?
+          </a>
+        </div>
+
+        <button
+          type="submit"
+          className="w-full bg-[#ff5c5c] text-white py-3 rounded font-semibold hover:bg-[#ff3b3b] transition"
+          disabled={isLoading}
+        >
+          {isLoading ? "Logging in..." : "LOGIN"}
+        </button>
+
+        {error && <p className="text-red-500 text-center mt-3">{error}</p>}
+
+        <div className="text-center mt-4 text-sm text-gray-400">
+          Not Registered?{" "}
+          <a href="/register" className="text-[#ff5c5c] font-semibold hover:underline">
+            Sign Up
+          </a>
+        </div>
+
+        <div className="text-center mt-4 text-gray-600 text-sm">
+          Or continue with social account
+        </div>
+
+        <button
+          type="button"
+          onClick={handleGoogleSignIn}
+          className="w-full flex items-center justify-center gap-2 bg-[#f5f5f5] text-black py-3 rounded mt-2 font-semibold text-sm border hover:bg-[#eaeaea] transition"
+        >
+          <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="w-5 h-5" />
+          LOGIN WITH GOOGLE
+        </button>
+      </form>
+    </div>
+  );
+}
