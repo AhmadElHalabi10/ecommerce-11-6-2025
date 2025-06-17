@@ -25,6 +25,7 @@ export const authOptions: AuthOptions = {
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
+
     CredentialsProvider({
       name: "Credentials",
       credentials: {
@@ -33,32 +34,40 @@ export const authOptions: AuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
+          console.error("Missing email or password");
           return null;
         }
 
-        const user = await db
-          .select()
-          .from(users)
-          .where(eq(users.email, credentials.email))
-          .limit(1);
+        try {
+          const result = await db
+            .select()
+            .from(users)
+            .where(eq(users.email, credentials.email))
+            .limit(1);
 
-        console.log(user);
-        
-        if (!user[0] || !user[0].password) {
+          const user = result[0];
+
+          if (!user || !user.password) {
+            console.error("User not found or missing password");
+            return null;
+          }
+
+          const isValid = await compare(credentials.password, user.password);
+
+          if (!isValid) {
+            console.error("Invalid password");
+            return null;
+          }
+
+          return {
+            id: user.id.toString(),
+            email: user.email,
+            name: user.name,
+          };
+        } catch (error) {
+          console.error("Auth error:", error);
           return null;
         }
-
-        const isValid = await compare(credentials.password, user[0].password);
-        
-        if (!isValid) {
-          return null;
-        }
-
-        return {
-          id: user[0].id.toString(),
-          email: user[0].email,
-          name: user[0].name,
-        };
       },
     }),
   ],
@@ -84,7 +93,13 @@ export const authOptions: AuthOptions = {
       return session;
     },
   },
+  debug: true,
+  logger: {
+    error(code, metadata) {
+      console.error("❌ AUTH ERROR", code, metadata);
+    },
+  },
 };
 
 const handler = NextAuth(authOptions);
-export { handler as GET, handler as POST }; 
+export { handler as GET, handler as POST };
