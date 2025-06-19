@@ -1,70 +1,69 @@
 "use client";
 
-import { Menu } from "lucide-react";
+import { useState } from "react";
+import Link from "next/link";
+import { Menu, X } from "lucide-react";
 
 export default function Navbar() {
+  const [open, setOpen] = useState(false);
+
   return (
-    <header className="border-b text-sm">
-      <div className="bg-[#f5f5f5] text-center py-1 text-gray-600">
+    <header className="text-white text-sm">
+      {/* Top bar */}
+      <div className="bg-neutral-100 text-center text-gray-600 py-1 text-xs">
         Get up to 50% off new season styles, limited time only
       </div>
 
-      <div className="flex justify-between items-center px-6 py-3">
+      {/* Main nav bar */}
+      <div className="bg-red-600 px-4 py-3 flex items-center justify-between">
         {/* Logo */}
-        <div className="text-xl font-bold text-red-500 flex items-center gap-2">
-          <span className="text-3xl">🛒</span>
-          <div>
-            <div>CLASSYSHOP</div>
-            <div className="text-xs text-gray-500 -mt-1">BIG MEGA STORE</div>
-          </div>
+        <Link href="/" className="flex items-center gap-2 font-bold text-white text-base sm:text-lg">
+          <span className="text-2xl">🛒</span>
+          Beirut Shoppers
+        </Link>
+
+        {/* Desktop Nav Links */}
+        <nav className="hidden md:flex gap-6 font-semibold text-white text-sm">
+          <Link href="/home-kitchen" className="hover:text-yellow-300">Home&Kitchen</Link>
+          <Link href="/shoes" className="hover:text-yellow-300">Shoes</Link>
+          <Link href="/electronics" className="hover:text-yellow-300">Electronics</Link>
+          <Link href="/accessories" className="hover:text-yellow-300">Accessories</Link>
+          <Link href="/contact" className="hover:text-yellow-300">Contact Us</Link>
+        </nav>
+
+        {/* Right icons */}
+        <div className="hidden md:flex items-center gap-4">
+          <Link href="/login" className="hover:underline">Log In</Link>
+          <Link href="/cart" className="relative">
+            🛒
+            <span className="absolute -top-2 -right-2 text-xs bg-white text-red-600 rounded-full px-1.5">2</span>
+          </Link>
         </div>
 
-        {/* Search */}
-        <div className="flex-1 mx-8">
-          <input
-            type="text"
-            placeholder="Search for products..."
-            className="w-full px-4 py-2 border rounded focus:outline-none bg-gray-100 text-sm"
-          />
-        </div>
-
-        {/* Auth Links + Icons */}
-        <div className="flex items-center gap-4 text-sm">
-          <a href="#" className="text-gray-700 hover:underline">
-            Help Center
-          </a>
-          <a href="#" className="text-gray-700 hover:underline">
-            Order Tracking
-          </a>
-          <a href="/login" className="font-semibold">
-            Login
-          </a>
-          <span>|</span>
-          <a href="/register" className="font-semibold">
-            Register
-          </a>
-          <button className="text-xl">🤍</button>
-          <button className="text-xl">🛒</button>
+        {/* Mobile icons */}
+        <div className="flex md:hidden items-center gap-4">
+          <Link href="/cart" className="relative text-xl">
+            🛒
+            <span className="absolute -top-1.5 -right-1.5 text-xs bg-white text-red-600 rounded-full px-1">2</span>
+          </Link>
+          <button onClick={() => setOpen(!open)}>
+            {open ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
         </div>
       </div>
 
-      {/* Bottom Nav */}
-      <nav className="flex items-center gap-6 px-6 py-2 bg-white text-gray-700 font-medium border-t">
-        <button className="flex items-center gap-2 font-semibold">
-          <Menu className="w-5 h-5" />
-          SHOP BY CATEGORIES
-        </button>
-        <a href="#" className="hover:text-red-500">Home</a>
-        <a href="#" className="hover:text-red-500">Fashion</a>
-        <a href="#" className="hover:text-red-500">Electronics</a>
-        <a href="#" className="hover:text-red-500">Bags</a>
-        <a href="#" className="hover:text-red-500">Footwear</a>
-        <a href="#" className="hover:text-red-500">Groceries</a>
-        <a href="#" className="hover:text-red-500">Beauty</a>
-        <a href="#" className="hover:text-red-500">Wellness</a>
-        <a href="#" className="hover:text-red-500">Jewellery</a>
-        <span className="ml-auto text-sm text-gray-500">🚀 Free International Delivery</span>
-      </nav>
+      {/* Mobile Nav Menu */}
+      {open && (
+        <div className="md:hidden bg-red-600 text-white font-medium text-sm">
+          <Link href="/home-kitchen" className="block border-b px-4 py-2">Home&Kitchen</Link>
+          <Link href="/shoes" className="block border-b px-4 py-2">Shoes</Link>
+          <Link href="/electronics" className="block border-b px-4 py-2">Electronics</Link>
+          <Link href="/accessories" className="block border-b px-4 py-2">Accessories</Link>
+          <Link href="/contact" className="block border-b px-4 py-2">Contact Us</Link>
+          <Link href="/login" className="block border-b px-4 py-2">Log In</Link>
+          <Link href="/cart" className="block border-b px-4 py-2">Cart</Link>
+        </div>
+      )}
     </header>
   );
 }

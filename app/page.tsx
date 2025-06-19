@@ -6,8 +6,11 @@ export default function HomePage() {
     <>
       <Navbar />
       <HeroBanner
-        images={["HomeBanner1.jpg", "HomeBanner2.jpg", "HomeBanner3.jpg"]}
-        links={["/fashion", "/electronic", "/bags"]}
+        title="Upgrade Your Lifestyle with BeirutShoppers"
+        description="Explore our exclusive collection and shop with confidence."
+        image="hero-image.png" // must be placed in /public/
+        ctaText="Shop Now"
+        ctaLink="/products"
       />
     </>
   );

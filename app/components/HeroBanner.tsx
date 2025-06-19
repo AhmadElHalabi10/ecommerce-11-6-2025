@@ -1,86 +1,52 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { ChevronRight, ChevronLeft } from "lucide-react";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
 
 interface HeroBannerProps {
-  images: string[]; // list of image filenames (in /public)
-  links: string[];  // list of links to redirect on click
+  title: string;
+  description: string;
+  image: string;
+  ctaText?: string;
+  ctaLink?: string;
 }
 
-export default function HeroBanner({ images, links }: HeroBannerProps) {
-  const [index, setIndex] = useState(0);
-  const [isHovered, setIsHovered] = useState(false);
-  const router = useRouter();
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-  const nextSlide = () => setIndex((prev) => (prev + 1) % images.length);
-  const prevSlide = () => setIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
-
-  useEffect(() => {
-    if (!isHovered) {
-      timeoutRef.current = setTimeout(nextSlide, 5000);
-    }
-    return () => clearTimeout(timeoutRef.current!);
-  }, [index, isHovered]);
-
-  const handleClick = () => router.push(links[index]);
-
+export default function HeroBanner({
+  title,
+  description,
+  image,
+  ctaText,
+  ctaLink,
+}: HeroBannerProps) {
   return (
-    <div
-      className="relative w-full h-[500px] overflow-hidden group cursor-pointer"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      onClick={handleClick}
-    >
-      {/* Slide image */}
-      <div
-        className="absolute inset-0 transition-all duration-500 ease-in-out"
-        style={{
-          transform: `translateX(-${index * 100}%)`,
-          width: `${images.length * 100}%`,
-          display: "flex",
-        }}
-      >
-        {images.map((img, i) => (
+    <section className="w-full bg-[#f9f9f9] rounded-xl shadow-sm overflow-hidden px-4 md:px-8">
+      <div className="flex flex-col-reverse md:flex-row items-center justify-between gap-10 py-10 max-w-7xl mx-auto">
+        {/* Text */}
+        <div className="w-full md:w-1/2 text-center md:text-left px-4 md:px-0">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-gray-800 mb-4 leading-snug">
+            {title}
+          </h1>
+          <p className="text-base sm:text-lg text-gray-600 mb-6">{description}</p>
+          {ctaText && ctaLink && (
+            <a
+              href={ctaLink}
+              className="inline-block px-6 py-3 bg-black text-white rounded-md hover:bg-gray-800 transition"
+            >
+              {ctaText}
+            </a>
+          )}
+        </div>
+
+        {/* Image */}
+        <div className="w-full md:w-1/2 aspect-[16/9] relative">
           <Image
-            key={i}
-            src={`/${img}`}
-            alt={`Hero ${i}`}
-            width={1920}
-            height={500}
-            className="w-full object-cover flex-shrink-0"
-            style={{ width: "100%", height: "100%" }}
-            priority={i === 0}
+            src={`/${image}`}
+            alt="Hero Banner"
+            fill
+            className="object-contain"
+            priority
           />
-        ))}
+        </div>
       </div>
-
-      {/* Left arrow */}
-      <button
-        onClick={(e) => {
-          e.stopPropagation();
-          prevSlide();
-        }}
-        className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-black p-2 rounded-full shadow-md z-10 transition"
-        aria-label="Previous Slide"
-      >
-        <ChevronLeft className="w-5 h-5" />
-      </button>
-
-      {/* Right arrow */}
-      <button
-        onClick={(e) => {
-          e.stopPropagation();
-          nextSlide();
-        }}
-        className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-[#f5f5f5] text-black p-2 rounded-full shadow-md z-10 transition"
-        aria-label="Next Slide"
-      >
-        <ChevronRight className="w-5 h-5" />
-      </button>
-    </div>
+    </section>
   );
 }
