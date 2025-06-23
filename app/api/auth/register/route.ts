@@ -1,8 +1,8 @@
-import { NextResponse } from 'next/server';
-import { db } from '@/app/lib/db';
-import { users } from '@/app/lib/schema';
-import { eq } from 'drizzle-orm';
-import bcrypt from 'bcryptjs';
+import { db } from "@/app/lib/db";
+import { users } from "@/app/lib/schema";
+import { eq } from "drizzle-orm";
+import bcrypt from "bcryptjs";
+import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
@@ -15,7 +15,7 @@ export async function POST(req: Request) {
 
     if (existingUser) {
       return NextResponse.json(
-        { error: 'User with this email already exists' },
+        { error: "Email is already in use" },
         { status: 400 }
       );
     }
@@ -23,22 +23,20 @@ export async function POST(req: Request) {
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create new user
-    const newUser = await db.insert(users).values({
+    // Insert new user
+    await db.insert(users).values({
       name,
       email,
       password: hashedPassword,
-    }).returning();
+      role: "user", // default role
+    });
 
+    return NextResponse.json({ success: true });
+  } catch (err) {
+    console.error("Register Error:", err);
     return NextResponse.json(
-      { message: 'User registered successfully', user: { id: newUser[0].id, email: newUser[0].email } },
-      { status: 201 }
-    );
-  } catch (error) {
-    console.error('Registration error:', error);
-    return NextResponse.json(
-      { error: 'Something went wrong' },
+      { error: "Internal server error" },
       { status: 500 }
     );
   }
-} 
+}

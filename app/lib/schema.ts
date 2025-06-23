@@ -1,5 +1,11 @@
-import { pgTable, serial, text, timestamp, integer } from 'drizzle-orm/pg-core';
-import { relations } from 'drizzle-orm';
+import {
+  pgTable,
+  serial,
+  text,
+  timestamp,
+  integer,
+} from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm";
 
 // --- Users Table ---
 export const users = pgTable("user", {
@@ -8,7 +14,8 @@ export const users = pgTable("user", {
   email: text("email").notNull().unique(),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   image: text("image"),
-  password: text("password"), // Optional, only used for credentials
+  password: text("password"),
+  role: text("role").default("user").notNull(), // "user" or "admin"
 });
 
 // --- Accounts Table ---
@@ -42,10 +49,17 @@ export const verificationTokens = pgTable("verificationToken", {
   expires: timestamp("expires", { mode: "date" }).notNull(),
 });
 
-// --- Optional Relations (not required unless you use drizzle ORM queries manually) ---
+// --- Optional Relations ---
 export const userRelations = relations(users, ({ one }) => ({
   account: one(accounts, {
     fields: [users.id],
     references: [accounts.userId],
   }),
 }));
+
+export const schema = {
+  users,
+  accounts,
+  sessions,
+  verificationTokens,
+};

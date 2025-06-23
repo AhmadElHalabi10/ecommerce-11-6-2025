@@ -3,9 +3,11 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
+import { useSession, signOut } from "next-auth/react";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const { data: session } = useSession(); // <-- check if user is logged in
 
   return (
     <header className="text-white text-sm">
@@ -33,7 +35,13 @@ export default function Navbar() {
 
         {/* Right icons */}
         <div className="hidden md:flex items-center gap-4">
-          <Link href="/login" className="hover:underline">Log In</Link>
+          {!session?.user ? (
+            <Link href="/auth/login" className="hover:underline">Log In</Link>
+          ) : (
+            <button onClick={() => signOut()} className="hover:underline">
+              Sign Out
+            </button>
+          )}
           <Link href="/cart" className="relative">
             🛒
             <span className="absolute -top-2 -right-2 text-xs bg-white text-red-600 rounded-full px-1.5">2</span>
@@ -60,7 +68,18 @@ export default function Navbar() {
           <Link href="/electronics" className="block border-b px-4 py-2">Electronics</Link>
           <Link href="/accessories" className="block border-b px-4 py-2">Accessories</Link>
           <Link href="/contact" className="block border-b px-4 py-2">Contact Us</Link>
-          <Link href="/login" className="block border-b px-4 py-2">Log In</Link>
+
+          {!session?.user ? (
+            <Link href="/auth/login" className="block border-b px-4 py-2">Log In</Link>
+          ) : (
+            <button
+              onClick={() => signOut()}
+              className="block border-b px-4 py-2 text-left w-full"
+            >
+              Sign Out
+            </button>
+          )}
+
           <Link href="/cart" className="block border-b px-4 py-2">Cart</Link>
         </div>
       )}

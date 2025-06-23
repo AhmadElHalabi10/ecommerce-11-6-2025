@@ -43,7 +43,7 @@ export default function RegisterPage() {
       }
 
       toast.success("Account created successfully!");
-      setTimeout(() => router.push("/login"), 1500);
+      setTimeout(() => router.push("/auth/login"), 1500);
     } catch {
       toast.error("Something went wrong. Please try again.");
     }
@@ -68,7 +68,9 @@ export default function RegisterPage() {
             {...register("name")}
             className="w-full p-3 border border-[#e5e7eb] rounded text-[15px] text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff5c5c]"
           />
-          {errors.name && <p className="text-sm text-red-500 mt-1">{errors.name.message}</p>}
+          {errors.name && (
+            <p className="text-sm text-red-500 mt-1">{errors.name.message}</p>
+          )}
         </div>
 
         <div className="mb-4">
@@ -78,7 +80,9 @@ export default function RegisterPage() {
             {...register("email")}
             className="w-full p-3 border border-[#e5e7eb] rounded text-[15px] text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff5c5c]"
           />
-          {errors.email && <p className="text-sm text-red-500 mt-1">{errors.email.message}</p>}
+          {errors.email && (
+            <p className="text-sm text-red-500 mt-1">{errors.email.message}</p>
+          )}
         </div>
 
         <div className="mb-4 relative">
@@ -103,7 +107,9 @@ export default function RegisterPage() {
               </svg>
             )}
           </span>
-          {errors.password && <p className="text-sm text-red-500 mt-1">{errors.password.message}</p>}
+          {errors.password && (
+            <p className="text-sm text-red-500 mt-1">{errors.password.message}</p>
+          )}
         </div>
 
         <button
@@ -116,23 +122,10 @@ export default function RegisterPage() {
 
         <div className="text-center mt-4 text-sm text-gray-400">
           Already have an account?{" "}
-          <a href="/login" className="text-[#ff5c5c] font-semibold hover:underline">
+          <a href="/auth/login" className="text-[#ff5c5c] font-semibold hover:underline">
             Login
           </a>
         </div>
-
-        <div className="text-center mt-4 text-gray-600 text-sm">
-          Or continue with social account
-        </div>
-
-        <button
-          type="button"
-          onClick={() => window.location.href = "/api/auth/signin?provider=google"}
-          className="w-full flex items-center justify-center gap-2 bg-white text-black py-3 rounded mt-2 font-semibold text-sm border hover:bg-gray-100 transition"
-        >
-          <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="w-5 h-5" />
-          SIGN UP WITH GOOGLE
-        </button>
       </form>
     </div>
   );
