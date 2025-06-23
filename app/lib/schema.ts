@@ -49,6 +49,25 @@ export const verificationTokens = pgTable("verificationToken", {
   expires: timestamp("expires", { mode: "date" }).notNull(),
 });
 
+// --- Products Table ---
+export const products = pgTable("product", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  category: text("category").notNull(),
+  price: integer("price").notNull(), // price in cents for accuracy
+  stock: integer("stock").notNull(),
+  status: text("status").notNull(), // 'active' or 'inactive'
+  discount: integer("discount"), // discount in percent (0-100)
+  description: text("description"),
+  image: text("image").notNull(), // product image URL
+});
+
+// --- Categories Table ---
+export const categories = pgTable("category", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull().unique(),
+});
+
 // --- Optional Relations ---
 export const userRelations = relations(users, ({ one }) => ({
   account: one(accounts, {
@@ -62,4 +81,6 @@ export const schema = {
   accounts,
   sessions,
   verificationTokens,
+  products,
+  categories,
 };
