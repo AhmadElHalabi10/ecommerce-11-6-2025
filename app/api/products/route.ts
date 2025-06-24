@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/app/lib/db";
 import { products } from "@/app/lib/schema";
+import { eq } from "drizzle-orm";
 
 // GET: Fetch all products
 export async function GET() {
@@ -20,4 +21,19 @@ export async function POST(req: NextRequest) {
     .values({ name, category, price, stock, status, discount, description, image })
     .returning();
   return NextResponse.json(newProduct);
+}
+
+// DELETE: Delete a product by id
+export async function DELETE(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
+  const id = searchParams.get("id");
+  if (!id) {
+    return NextResponse.json({ error: "Product ID is required" }, { status: 400 });
+  }
+  try {
+    await db.delete(products).where(eq(products.id, Number(id)));
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    return NextResponse.json({ error: "Failed to delete product" }, { status: 500 });
+  }
 } 
