@@ -21,7 +21,7 @@ export default function AdminSidebar() {
     { name: "Users", href: "/dashboard/users", icon: Users },
     { name: "Analytics", href: "/dashboard/analytics", icon: BarChart3 },
     { name: "Settings", href: "/dashboard/settings", icon: Settings },
-    { name: "Categories", href: "/dashboard/categories", icon: Settings },
+    { name: "Categories", href: "/dashboard/categories", icon: Package },
   ];
 
   return (
