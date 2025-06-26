@@ -4,10 +4,12 @@ import { useState } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { useSession, signOut } from "next-auth/react";
+import { useCartStore } from "../store/cartStore";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
-  const { data: session } = useSession(); // <-- check if user is logged in
+  const { data: session } = useSession();
+  const totalCount = useCartStore((state) => state.totalCount);
 
   return (
     <header className="text-white text-sm">
@@ -21,7 +23,7 @@ export default function Navbar() {
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 font-bold text-white text-base sm:text-lg">
           <span className="text-2xl">🛒</span>
-          Beirut Shoppers
+          Happy Home
         </Link>
 
         {/* Desktop Nav Links */}
@@ -42,9 +44,13 @@ export default function Navbar() {
               Sign Out
             </button>
           )}
-          <Link href="/cart" className="relative">
+          <Link href="/cart" className="relative text-xl">
             🛒
-            <span className="absolute -top-2 -right-2 text-xs bg-white text-red-600 rounded-full px-1.5">2</span>
+            {totalCount > 0 && (
+              <span className="absolute -top-2 -right-2 text-xs bg-white text-red-600 rounded-full px-1.5">
+                {totalCount}
+              </span>
+            )}
           </Link>
         </div>
 
@@ -52,7 +58,11 @@ export default function Navbar() {
         <div className="flex md:hidden items-center gap-4">
           <Link href="/cart" className="relative text-xl">
             🛒
-            <span className="absolute -top-1.5 -right-1.5 text-xs bg-white text-red-600 rounded-full px-1">2</span>
+            {totalCount > 0 && (
+              <span className="absolute -top-1.5 -right-1.5 text-xs bg-white text-red-600 rounded-full px-1">
+                {totalCount}
+              </span>
+            )}
           </Link>
           <button onClick={() => setOpen(!open)}>
             {open ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
