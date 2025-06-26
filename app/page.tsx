@@ -28,13 +28,17 @@ export default async function HomePage() {
     <>
       <Navbar />
       <HeroBanner
-        title="Upgrade Your Lifestyle with BeirutShoppers"
+        title="Upgrade Your Lifestyle with HappyHome"
         description="Explore our exclusive collection and shop with confidence."
         image="hero-image.png" // must be placed in /public/
         ctaText="Shop Now"
         ctaLink="/products"
       />
-      <ProductSection title="Featured Products" products={mappedProducts} />
+      <ProductSection title="Shop by Home's products!" category="homekitchen" />
+      <ProductSection title="Shop by Shoes!" category="shoes" />
+      {/* <ProductSection title="Shop Electronics!" category="Electronics" />
+      <ProductSection title="Shop Accessories!" category="Accessories" /> */}
+
     </>
   );
 }
