@@ -3,10 +3,15 @@ import { db } from "@/app/lib/db";
 import { products } from "@/app/lib/schema";
 import { eq } from "drizzle-orm";
 
-// ✅ GET: Fetch all products
+// ✅ GET: Fetch all products, or filter by category if provided
 export async function GET(req: NextRequest) {
-  const allProducts = await db.select().from(products);
-  return NextResponse.json(allProducts);
+  const category = req.nextUrl.searchParams.get("category");
+
+  const result = category
+    ? await db.select().from(products).where(eq(products.category, category))
+    : await db.select().from(products);
+
+  return NextResponse.json(result);
 }
 
 // ✅ POST: Add a new product
@@ -40,4 +45,3 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json({ error: "Failed to delete product" }, { status: 500 });
   }
 }
-  
