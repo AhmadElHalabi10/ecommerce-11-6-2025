@@ -18,8 +18,8 @@ export default function HeroBanner({
   ctaLink,
 }: HeroBannerProps) {
   return (
-    <section className="w-full bg-[#f9f9f9] rounded-xl shadow-sm overflow-hidden px-4 md:px-8">
-      <div className="flex flex-col-reverse md:flex-row items-center justify-between gap-10 py-10 max-w-7xl mx-auto">
+    <section className="w-full bg-[#f9f9f9] shadow-sm overflow-hidden">
+      <div className="flex flex-col-reverse md:flex-row items-center justify-between gap-10 py-10 max-w-7xl mx-auto px-4 md:px-8">
         {/* Text */}
         <div className="w-full md:w-1/2 text-center md:text-left px-4 md:px-0">
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-gray-800 mb-4 leading-snug">
