@@ -28,11 +28,11 @@ export default function Navbar() {
 
         {/* Desktop Nav Links */}
         <nav className="hidden md:flex gap-6 font-semibold text-white text-sm">
-          <Link href="/home-kitchen" className="hover:text-yellow-300">Home&Kitchen</Link>
-          <Link href="/shoes" className="hover:text-yellow-300">Shoes</Link>
-          <Link href="/electronics" className="hover:text-yellow-300">Electronics</Link>
-          <Link href="/accessories" className="hover:text-yellow-300">Accessories</Link>
-          <Link href="/contact" className="hover:text-yellow-300">Contact Us</Link>
+          <Link href="/pages/home-kitchen" className="hover:text-yellow-300">Home&Kitchen</Link>
+          <Link href="/pages/shoes" className="hover:text-yellow-300">Shoes</Link>
+          <Link href="/pages/electronics" className="hover:text-yellow-300">Electronics</Link>
+          <Link href="/pages/accessories" className="hover:text-yellow-300">Accessories</Link>
+          <Link href="/pages/contact" className="hover:text-yellow-300">Contact Us</Link>
         </nav>
 
         {/* Right icons */}
@@ -73,11 +73,11 @@ export default function Navbar() {
       {/* Mobile Nav Menu */}
       {open && (
         <div className="md:hidden bg-red-600 text-white font-medium text-sm">
-          <Link href="/home-kitchen" className="block border-b px-4 py-2">Home&Kitchen</Link>
-          <Link href="/shoes" className="block border-b px-4 py-2">Shoes</Link>
-          <Link href="/electronics" className="block border-b px-4 py-2">Electronics</Link>
-          <Link href="/accessories" className="block border-b px-4 py-2">Accessories</Link>
-          <Link href="/contact" className="block border-b px-4 py-2">Contact Us</Link>
+          <Link href="/pages/home-kitchen" className="block border-b px-4 py-2">Home&Kitchen</Link>
+          <Link href="/pages/shoes" className="block border-b px-4 py-2">Shoes</Link>
+          <Link href="/pages/electronics" className="block border-b px-4 py-2">Electronics</Link>
+          <Link href="/pages/accessories" className="block border-b px-4 py-2">Accessories</Link>
+          <Link href="/pages/contact" className="block border-b px-4 py-2">Contact Us</Link>
 
           {!session?.user ? (
             <Link href="/auth/login" className="block border-b px-4 py-2">Log In</Link>
